@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/welcome_page.dart';
+import 'package:intl/intl.dart';
+import 'dart:async';
 void main() {
   runApp(MyApp());
 }
@@ -25,9 +27,10 @@ class _FormState extends State<Form> {
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _phone = TextEditingController();
+
+  var time = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    var time = DateTime.now();
     return  Scaffold(
       body: Center(
         child: Column(
@@ -35,7 +38,16 @@ class _FormState extends State<Form> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('$time',style: TextStyle(fontSize: 20),),
+              child: Text('${DateFormat('d-MM-y QQQQ').format(time)}',style: TextStyle(fontSize: 20),),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(onPressed: (){
+                setState(() {
+                  time = DateTime.now();
+                });
+              }, child: Text('Current Time')),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -66,6 +78,22 @@ class _FormState extends State<Form> {
                     labelText: 'Enter your Phone No'
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(onPressed: () async{
+                final DateTime? datePicked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2024)
+                );
+
+                setState(() {
+                  time = datePicked!;
+                });
+
+              }, child: Text('Pick Date')),
             ),
             ElevatedButton(onPressed: (){
               //welcomepage send data back to this screen

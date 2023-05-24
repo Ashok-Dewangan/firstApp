@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/splash_page.dart';
@@ -24,23 +26,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomeState extends State<MyHomePage>{
-
+  var cWidth = 200.0;
+  var cHeight = 200.0;
+  var opacity = 1.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 appBar: AppBar(title: Text('Home Page')),
-      body: Container(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Welcome Ashok'),
-              ElevatedButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomePage()));
-              }, child: Text('Next')
-              )
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedOpacity(
+              opacity: opacity,
+              duration: Duration(seconds: 2),
+              child: AnimatedContainer(
+                  width: cWidth,
+                  height: cHeight,
+                  color: Colors.orange,
+                duration: Duration(seconds: 2),
+              ),
+            ),
+            ElevatedButton(onPressed: (){
+              setState(() {
+                //generate random width and height
+                Random random = new Random();
+                cWidth = random.nextInt(100).toDouble() + 100;
+                cHeight = random.nextInt(100).toDouble() + 100;
+              });
+            }, child: Text('Click Me')),
+            ElevatedButton(onPressed: (){
+              setState(() {
+                opacity = opacity == 1.0 ? 0.0 : 1.0;
+              });
+            }, child: Text('Opacity')),
+          ],
         ),
       ),
     );
